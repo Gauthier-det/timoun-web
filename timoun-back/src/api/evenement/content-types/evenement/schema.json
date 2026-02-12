@@ -1,10 +1,10 @@
 {
   "kind": "singleType",
-  "collectionName": "articles",
+  "collectionName": "evenements",
   "info": {
-    "singularName": "article",
-    "pluralName": "articles",
-    "displayName": "Article"
+    "singularName": "evenement",
+    "pluralName": "evenements",
+    "displayName": "Evenement"
   },
   "options": {
     "draftAndPublish": true
@@ -15,22 +15,18 @@
       "type": "string",
       "required": true
     },
-    "resume": {
-      "type": "text",
-      "required": true
-    },
-    "release_date": {
+    "start_date": {
       "type": "datetime",
       "required": true
     },
-    "author": {
+    "end_date": {
+      "type": "datetime"
+    },
+    "city": {
       "type": "string",
       "required": true
     },
-    "place": {
-      "type": "string"
-    },
-    "main_image": {
+    "image": {
       "type": "media",
       "multiple": false,
       "allowedTypes": [
@@ -44,15 +40,8 @@
       "type": "blocks",
       "required": true
     },
-    "galery": {
-      "type": "media",
-      "multiple": true,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+    "address": {
+      "type": "string"
     }
   }
 }

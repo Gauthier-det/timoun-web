@@ -441,8 +441,8 @@ export interface ApiArticleArticle extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    author: Schema.Attribute.String;
-    content: Schema.Attribute.Blocks;
+    author: Schema.Attribute.String & Schema.Attribute.Required;
+    content: Schema.Attribute.Blocks & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -459,9 +459,45 @@ export interface ApiArticleArticle extends Struct.SingleTypeSchema {
     main_image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     >;
+    place: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    release_date: Schema.Attribute.DateTime;
-    title: Schema.Attribute.String;
+    release_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    resume: Schema.Attribute.Text & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiEvenementEvenement extends Struct.SingleTypeSchema {
+  collectionName: 'evenements';
+  info: {
+    displayName: 'Evenement';
+    pluralName: 'evenements';
+    singularName: 'evenement';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address: Schema.Attribute.String;
+    city: Schema.Attribute.String & Schema.Attribute.Required;
+    content: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    end_date: Schema.Attribute.DateTime;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::evenement.evenement'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    start_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -980,6 +1016,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::article.article': ApiArticleArticle;
+      'api::evenement.evenement': ApiEvenementEvenement;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
