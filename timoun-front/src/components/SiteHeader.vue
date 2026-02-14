@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 const menuOpen = ref(false)
 const route = useRoute()
 
-// Groupes de routes pour les sous-menus
 const menuGroups = {
   discover: ['/qui-sommes-nous', '/notre-action', '/le-village', '/galerie'],
   news: ['/articles', '/articles/:id', '/evenements', '/evenements/:id']
