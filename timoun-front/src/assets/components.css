@@ -1,0 +1,142 @@
+/* Components: Card */
+.card {
+  background: var(--bg-card);
+  box-shadow: 0 6px 20px rgba(27, 45, 58, 0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  padding: 0.55rem 0.95rem;
+  background: linear-gradient(135deg, var(--green-light) 80%, var(--red) 100%);
+  color: #fff;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.event-card .card-header {
+  background: linear-gradient(135deg, var(--green-light) 80%, var(--blue) 100%);
+}
+
+.card-body {
+  padding: 0.9rem 0.95rem 0.6rem;
+  flex: 1;
+}
+
+.card-title {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.card-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.card-media-placeholder {
+  margin-top: 0.7rem;
+  border-radius: 8px;
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
+}
+
+.badge-date {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.78rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Components: Hero */
+.hero {
+  padding: 1.5rem 0 0.75rem;
+}
+
+.hero-kicker {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--red);
+  font-weight: 600;
+}
+
+.hero-title {
+  margin: 0.15rem 0 0.35rem;
+  font-size: 1.9rem;
+}
+
+.hero-subtitle {
+  margin: 0;
+  color: var(--text-muted);
+  max-width: 580px;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 1.55rem;
+  }
+}
+
+/* Components: Panel */
+.panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem 1.3rem;
+  box-shadow: 0 6px 20px rgba(27, 45, 58, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0.45rem;
+  font-size: 1.1rem;
+}
+
+.panel-text {
+  margin: 0;
+  font-size: 0.93rem;
+  color: var(--text-muted);
+}
+
+/* Components: Section */
+.section {
+  margin-top: 2.25rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.section-kicker {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--red);
+  font-weight: 600;
+}
