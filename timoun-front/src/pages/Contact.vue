@@ -55,17 +55,36 @@ const handleSubmit = () => {
 
           <Panel title="Coordonnées de l'association">
             <div style="margin-bottom: 1rem;">
-              <strong>Ti'moun</strong><br>
-              12 rue Exemple<br>
-              14000 Caen, France
+              <strong>Présidente :</strong> Mylène Liard<br>
+              <a href="mailto:mylene.liard1@gmail.com">mylene.liard1@gmail.com</a> – 06 85 66 39 30
             </div>
             <div style="margin-bottom: 1rem;">
-              <strong>Email :</strong> contact@timoun.org<br>
-              <strong>Téléphone :</strong> +33 (0)1 23 45 67 89
+              <strong>Normandie 27 & 76 :</strong> Jacques et Danièle Caldwell<br>
+              <a href="mailto:jacques.caldwell@free.fr">jacques.caldwell@free.fr</a> – 06 12 22 46 73
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <strong>Normandie 14, 50 & 61 :</strong> Annie Lambert-Carabin<br>
+              <a href="mailto:annie.lambert-carabin@wanadoo.fr">annie.lambert-carabin@wanadoo.fr</a> – 06 83 54 40 51
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <strong>Bretagne :</strong> Marie José Mazé<br>
+              <a href="mailto:mjmaze@laposte.net">mjmaze@laposte.net</a> - 07 78 07 65 11
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <strong>Parrainages et aide à la scolarité :</strong> Colette Gagneux<br>
+              <a href="mailto:colette.gagneux@free.fr">colette.gagneux@free.fr</a> – 06 81 59 82 77
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <strong>Parrainages « développement rural » :</strong> Jacky Berquez<br>
+              <a href="mailto:berquez@free.fr">berquez@free.fr</a> - 06 72 76 01 13
             </div>
             <p>
-              Vous pouvez aussi nous suivre sur les réseaux sociaux pour recevoir les dernières nouvelles
-              et les prochains évènements.
+              Pour tous dons ou parrainages, vous recevrez un reçu pour déduction fiscale au titre de « don à une association ».
+            </p>
+            <p>
+              <a href="https://www.association-timoun.fr">www.association-timoun.fr</a><br>
+              <a href="mailto:contact@association-timoun.fr">contact@association-timoun.fr</a><br>
+              <a href="https://www.facebook.com/assoctimoun">www.facebook.com/assoctimoun</a>
             </p>
           </Panel>
         </div>

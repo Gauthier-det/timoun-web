@@ -18,17 +18,17 @@ import Panel from '../components/Panel.vue'
 
       <Section title="">
         <Panel title="Notre histoire">
-          Quelques amis, un voyage en Haïti, une rencontre avec un village&nbsp;: Ti'moun est née de ce lien fort et de la volonté d'apporter un soutien simple et concret aux enfants.
+          L’association Ti’Moun a été créée en 1998 dans le grand ouest de la France. Elle agit en Haïti, principalement à Ternier (6000 habitants), secteur de la Commune de la Vallée de Jacmel (40000 habitants) mais aussi à Jacmel et Port au Prince. L'association a pour but d’accompagner l’enfant dans son pays et dans sa famille, et d’une façon plus générale, de soutenir et mettre en place tous programmes visant à améliorer ses conditions de vie.
         </Panel>
       </Section>
 
       <Section title="">
         <div class="grid-two">
-          <Panel title="Nos valeurs">
-            Respect, solidarité, transparence&nbsp;: nous travaillons avec les habitants et les responsables locaux pour co‑construire les projets, en expliquant clairement l'usage des dons.
+          <Panel title="Nos coordinateurs locaux">
+            Tony Bouchette, un haïtien ancien parrainé, et son épouse Emma sont nos interlocuteurs et coordinateurs sur place. Ils sont aidés par une petite équipe d’habitants. Les actions sont réalisées à partir de la « Maison du Bonheur ».
           </Panel>
-          <Panel title="L'équipe bénévole">
-            L'association est portée par une petite équipe de bénévoles, sans salarié. Chacun apporte son temps, ses compétences et son réseau pour faire vivre les projets.
+          <Panel title="L'équipe en France">
+            Quand la situation en Haïti le permet, les membres de l’association se rendent sur place, à leurs frais, au moins deux fois par an ce qui permet un suivi de nos actions efficace et un lien renforcé. La présidente est Mylène Liard.
           </Panel>
         </div>
       </Section>

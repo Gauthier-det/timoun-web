@@ -9,6 +9,7 @@ defineProps({
   text: String,
   location: String,
   isEvent: Boolean,
+  imageUrl: String,
   withMedia: {
     type: Boolean,
     default: true
@@ -24,7 +25,10 @@ defineProps({
       <h3 class="card-title">{{ title }}</h3>
       <p v-if="!isEvent" class="card-meta">{{ date }}</p>
       <p class="card-text">{{ text }}</p>
-      <div v-if="withMedia" class="card-media-placeholder">Photo ou illustration</div>
+      <div v-if="withMedia" class="card-media-placeholder">
+        <img v-if="imageUrl" :src="imageUrl" :alt="title" class="card-media-img" />
+        <span v-else>Photo ou illustration</span>
+      </div>
     </div>
   </article>
 </template>
