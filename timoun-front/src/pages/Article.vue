@@ -1,16 +1,22 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import SiteHeader from '../components/SiteHeader.vue'
 import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Panel from '../components/Panel.vue'
+
+const route = useRoute()
+const articleId = route.params.id
 
 const article = ref(null)
 const loading = ref(true)
 const error = ref(null)
 
 function formatDate(dateStr) {
+  if (!dateStr) return '-'
   const d = new Date(dateStr)
+  if (Number.isNaN(d.getTime())) return '-'
   return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
@@ -63,7 +69,7 @@ const contentHtml = computed(() => blocksToHtml(article.value?.content))
 
 const heroSubtitle = computed(() => {
   if (!article.value) return ''
-  return `${formatDate(article.value.release_date)} • par ${article.value.author}`
+  return `${formatDate(article.value.release_date)} • par ${article.value.author || 'Auteur inconnu'}`
 })
 
 onMounted(async () => {
@@ -71,7 +77,13 @@ onMounted(async () => {
     const res = await fetch('http://localhost:1337/api/articles?populate=main_image')
     if (!res.ok) throw new Error(`Erreur ${res.status}`)
     const json = await res.json()
-    article.value = json.data
+    const list = Array.isArray(json.data) ? json.data : []
+
+    article.value = list.find((item) => `${item.documentId}` === `${articleId}` || `${item.id}` === `${articleId}`) || null
+
+    if (!article.value) {
+      throw new Error('Article introuvable')
+    }
   } catch (e) {
     error.value = e.message
   } finally {

@@ -38,7 +38,7 @@ const upcomingEvents = computed(() =>
 onMounted(async () => {
   const [artRes, evtRes] = await Promise.allSettled([
     fetch('http://localhost:1337/api/articles?populate=main_image'),
-    fetch('http://localhost:1337/api/evenement'),
+    fetch('http://localhost:1337/api/evenements'),
   ])
 
   if (artRes.status === 'fulfilled' && artRes.value.ok) {
@@ -47,7 +47,7 @@ onMounted(async () => {
   }
   if (evtRes.status === 'fulfilled' && evtRes.value.ok) {
     const json = await evtRes.value.json()
-    evenements.value = normalize(json.data)
+    evenements.value = Array.isArray(json.data) ? json.data : []
   }
 })
 </script>

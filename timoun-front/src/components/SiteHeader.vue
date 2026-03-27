@@ -44,8 +44,12 @@ watch(() => route.path, () => {
   <header class="site-header">
     <div class="navbar">
       <div class="brand">
-        <img src="/resources/graphics/logo.png" alt="Ti'moun" class="brand-logo">
-        <RouterLink to="/" class="brand-link"><span class="brand-title">Ti'moun</span></RouterLink>
+        <RouterLink to="/" class="brand-link brand-link-home" aria-label="Accueil Ti'moun">
+          <span class="brand-logo-shell">
+            <img src="/resources/graphics/graphicslogo.png" alt="Ti'moun" class="brand-logo">
+          </span>
+          <span class="brand-title">Ti'moun</span>
+        </RouterLink>
       </div>
       <button class="nav-toggle" :class="{ open: menuOpen }" @click="toggleMenu" aria-label="Menu">&#9776;</button>
       <nav class="nav-links" :class="{ open: menuOpen }">

@@ -470,7 +470,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiEvenementEvenement extends Struct.SingleTypeSchema {
+export interface ApiEvenementEvenement extends Struct.CollectionTypeSchema {
   collectionName: 'evenements';
   info: {
     displayName: 'Evenement';

@@ -1,9 +1,55 @@
 <script setup>
+import { ref, computed, onMounted } from 'vue'
 import SiteHeader from '../components/SiteHeader.vue'
 import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Section from '../components/Section.vue'
-import Card from '../components/Card.vue'
+
+const evenements = ref([])
+const loading = ref(true)
+const error = ref(null)
+
+function formatDate(dateStr) {
+  if (!dateStr) return '-'
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+}
+
+function formatDateRange(startDateStr, endDateStr) {
+  const start = formatDate(startDateStr)
+  if (!endDateStr) return start
+  const end = formatDate(endDateStr)
+  return `${start} - ${end}`
+}
+
+function firstParagraph(blocks) {
+  if (!Array.isArray(blocks)) return ''
+  const paragraph = blocks.find((block) => block.type === 'paragraph')
+  if (!paragraph || !Array.isArray(paragraph.children)) return ''
+
+  return paragraph.children
+    .filter((node) => typeof node.text === 'string')
+    .map((node) => node.text)
+    .join(' ')
+    .trim()
+}
+
+const sortedEvenements = computed(() =>
+  [...evenements.value].sort((a, b) => new Date(a.start_date) - new Date(b.start_date))
+)
+
+onMounted(async () => {
+  try {
+    const res = await fetch('http://localhost:1337/api/evenements?populate=image')
+    if (!res.ok) throw new Error(`Erreur ${res.status}`)
+    const json = await res.json()
+    evenements.value = Array.isArray(json.data) ? json.data : []
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    loading.value = false
+  }
+})
 </script>
 
 <template>
@@ -17,34 +63,34 @@ import Card from '../components/Card.vue'
       />
 
       <Section title="">
-        <div class="timeline">
-          <Card 
-            type="Évènement à venir"
-            title="Concert solidaire pour Ti'moun"
-            date="17/05/2026"
-            location="Mont Saint Aignan"
-            :isEvent="true"
-            text="Soirée musicale au profit des actions en Haïti. Présentation de l'association, témoignages et temps convivial."
-            :withMedia="false"
-          />
-          <Card 
-            type="Évènement à venir"
-            title="Journée découverte Haïti"
-            date="17/09/2026"
-            location="Rouen"
-            :isEvent="true"
-            text="Expositions, ateliers pour enfants et échanges autour de la vie au village et des projets en cours."
-            :withMedia="false"
-          />
-          <Card 
-            type="Évènement à venir"
-            title="Marche solidaire"
-            date="24/03/2026"
-            location="Paris"
-            :isEvent="true"
-            text="Marche de 10 km pour lever des fonds et sensibiliser au projet de l'association."
-            :withMedia="false"
-          />
+        <div v-if="loading" class="news-loading">Chargement…</div>
+        <div v-else-if="error" class="news-error">Impossible de charger les évènements : {{ error }}</div>
+        <div v-else-if="sortedEvenements.length === 0" class="news-empty">Aucun évènement disponible.</div>
+        <div v-else class="news-list">
+          <RouterLink
+            v-for="evenement in sortedEvenements"
+            :key="evenement.documentId || evenement.id"
+            :to="`/evenements/${evenement.documentId || evenement.id}`"
+            class="news-row"
+          >
+            <div class="news-thumb">
+              <img
+                v-if="evenement.image?.url"
+                :src="'http://localhost:1337' + evenement.image.url"
+                :alt="evenement.title"
+                class="news-thumb-img"
+              />
+              <span v-else>Photo</span>
+            </div>
+
+            <div>
+              <h2 class="news-row-title">{{ evenement.title }}</h2>
+              <p class="news-row-meta">
+                {{ formatDateRange(evenement.start_date, evenement.end_date) }} • {{ evenement.city || '-' }}
+              </p>
+              <p class="card-text">{{ firstParagraph(evenement.content) || "Découvrez les détails de cet évènement." }}</p>
+            </div>
+          </RouterLink>
         </div>
       </Section>
     </main>

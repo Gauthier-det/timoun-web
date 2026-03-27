@@ -21,21 +21,47 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   white-space: nowrap;
+}
+
+.brand-link-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.72rem;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.18rem 0.42rem 0.18rem 0.18rem;
+  border-radius: 999px;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.brand-link-home:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.brand-logo-shell {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(240, 246, 250, 0.88) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow: 0 9px 20px rgba(10, 30, 42, 0.22);
 }
 
 .brand-logo {
   width: 48px;
   height: 48px;
   object-fit: contain;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 4px;
+  border-radius: 10px;
+  display: block;
 }
 
 .brand-link {
@@ -49,7 +75,8 @@
   font-size: 1.3rem;
   line-height: 1.3;
   font-weight: 800;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.045em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
 }
 
 .nav-links {
@@ -155,6 +182,26 @@
 @media (max-width: 768px) {
   .navbar {
     padding: 0.75rem 1rem;
+  }
+
+  .brand-link-home {
+    padding-right: 0.3rem;
+    gap: 0.58rem;
+  }
+
+  .brand-logo-shell {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-title {
+    font-size: 1.16rem;
   }
 
   .nav-links {
