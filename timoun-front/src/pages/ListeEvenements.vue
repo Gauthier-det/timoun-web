@@ -4,6 +4,7 @@ import SiteHeader from '../components/SiteHeader.vue'
 import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Section from '../components/Section.vue'
+import { API_URL } from '../api.js'
 
 const evenements = ref([])
 const loading = ref(true)
@@ -40,7 +41,7 @@ const sortedEvenements = computed(() =>
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://localhost:1337/api/evenements?populate=image')
+    const res = await fetch(`${API_URL}/api/evenements?populate=image`)
     if (!res.ok) throw new Error(`Erreur ${res.status}`)
     const json = await res.json()
     evenements.value = Array.isArray(json.data) ? json.data : []
@@ -76,7 +77,7 @@ onMounted(async () => {
             <div class="news-thumb">
               <img
                 v-if="evenement.image?.url"
-                :src="'http://localhost:1337' + evenement.image.url"
+                :src="API_URL + evenement.image.url"
                 :alt="evenement.title"
                 class="news-thumb-img"
               />

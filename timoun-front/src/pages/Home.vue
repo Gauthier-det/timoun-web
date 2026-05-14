@@ -4,11 +4,15 @@ import SiteHeader from '../components/SiteHeader.vue'
 import SiteFooter from '../components/SiteFooter.vue'
 import Section from '../components/Section.vue'
 import Card from '../components/Card.vue'
+import { API_URL } from '../api.js'
 
 const articles = ref([])
 const evenements = ref([])
+const loading = ref(true)
+const error = ref(null)
 
 function formatDate(dateStr) {
+  if (!dateStr) return '-'
   return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
@@ -36,18 +40,28 @@ const upcomingEvents = computed(() =>
 )
 
 onMounted(async () => {
-  const [artRes, evtRes] = await Promise.allSettled([
-    fetch('http://localhost:1337/api/articles?populate=main_image'),
-    fetch('http://localhost:1337/api/evenements'),
-  ])
+  try {
+    const [artRes, evtRes] = await Promise.allSettled([
+      fetch(`${API_URL}/api/articles?populate=main_image`),
+      fetch(`${API_URL}/api/evenements`),
+    ])
 
-  if (artRes.status === 'fulfilled' && artRes.value.ok) {
-    const json = await artRes.value.json()
-    articles.value = normalize(json.data)
-  }
-  if (evtRes.status === 'fulfilled' && evtRes.value.ok) {
-    const json = await evtRes.value.json()
-    evenements.value = Array.isArray(json.data) ? json.data : []
+    if (artRes.status === 'fulfilled' && artRes.value.ok) {
+      const json = await artRes.value.json()
+      articles.value = normalize(json.data)
+    }
+    if (evtRes.status === 'fulfilled' && evtRes.value.ok) {
+      const json = await evtRes.value.json()
+      evenements.value = Array.isArray(json.data) ? json.data : []
+    }
+
+    if (artRes.status === 'rejected' && evtRes.status === 'rejected') {
+      error.value = 'Impossible de joindre le serveur.'
+    }
+  } catch {
+    error.value = 'Une erreur inattendue est survenue.'
+  } finally {
+    loading.value = false
   }
 })
 </script>
@@ -56,42 +70,46 @@ onMounted(async () => {
   <div class="page-wrapper">
     <SiteHeader />
     <main>
-      <Section kicker="Haïti • Sur le terrain" title="Les dernières actualités en Haïti">
-        <div class="cards-grid">
-          <RouterLink
-            v-for="article in latestArticles"
-            :key="article.documentId"
-            :to="`/articles/${article.documentId}`"
-            class="card-link"
-          >
-            <Card
-              type="Actualité"
-              :title="article.title"
-              :date="formatDate(article.release_date)"
-              :text="article.resume"
-              :imageUrl="article.main_image?.url ? 'http://localhost:1337' + article.main_image.url : undefined"
-            />
-          </RouterLink>
-          <p v-if="latestArticles.length === 0" class="text-muted">Aucun article disponible.</p>
-        </div>
-      </Section>
+      <div v-if="loading" class="news-loading">Chargement…</div>
+      <div v-else-if="error" class="news-error">{{ error }}</div>
+      <template v-else>
+        <Section kicker="Haïti • Sur le terrain" title="Les dernières actualités en Haïti">
+          <div class="cards-grid">
+            <RouterLink
+              v-for="article in latestArticles"
+              :key="article.documentId"
+              :to="`/articles/${article.documentId}`"
+              class="card-link"
+            >
+              <Card
+                type="Actualité"
+                :title="article.title || 'Sans titre'"
+                :date="formatDate(article.release_date)"
+                :text="article.resume || ''"
+                :imageUrl="article.main_image?.url ? API_URL + article.main_image.url : undefined"
+              />
+            </RouterLink>
+            <p v-if="latestArticles.length === 0" class="text-muted">Aucun article disponible.</p>
+          </div>
+        </Section>
 
-      <Section kicker="Agenda" title="Calendrier et futurs évènements">
-        <div class="timeline">
-          <Card
-            v-for="evt in upcomingEvents"
-            :key="evt.documentId"
-            type="Évènement à venir"
-            :title="evt.title"
-            :date="formatDate(evt.start_date)"
-            :location="evt.city"
-            :isEvent="true"
-            :text="firstParagraph(evt.content)"
-            :withMedia="false"
-          />
-          <p v-if="upcomingEvents.length === 0" class="text-muted">Aucun évènement à venir.</p>
-        </div>
-      </Section>
+        <Section kicker="Agenda" title="Calendrier et futurs évènements">
+          <div class="timeline">
+            <Card
+              v-for="evt in upcomingEvents"
+              :key="evt.documentId"
+              type="Évènement à venir"
+              :title="evt.title || 'Sans titre'"
+              :date="formatDate(evt.start_date)"
+              :location="evt.city || ''"
+              :isEvent="true"
+              :text="firstParagraph(evt.content)"
+              :withMedia="false"
+            />
+            <p v-if="upcomingEvents.length === 0" class="text-muted">Aucun évènement à venir.</p>
+          </div>
+        </Section>
+      </template>
     </main>
     <SiteFooter />
   </div>

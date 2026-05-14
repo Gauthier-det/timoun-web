@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: timoun_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-strapi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-strapi}
+      POSTGRES_DB: ${POSTGRES_DB:-timoun_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-strapi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  back:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.back
+    container_name: timoun_back
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 1337
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${POSTGRES_DB:-timoun_db}
+      DATABASE_USERNAME: ${POSTGRES_USER:-strapi}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-strapi}
+      NODE_ENV: production
+    ports:
+      - "1337:1337"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - strapi_uploads:/app/public/uploads
+
+  front:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.front
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:1337}
+    container_name: timoun_front
+    ports:
+      - "80:80"
+    depends_on:
+      - back
+
+volumes:
+  postgres_data:
+  strapi_uploads:

@@ -5,6 +5,7 @@ import SiteHeader from '../components/SiteHeader.vue'
 import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Panel from '../components/Panel.vue'
+import { API_URL } from '../api.js'
 
 const route = useRoute()
 const articleId = route.params.id
@@ -41,7 +42,7 @@ function blockToHtml(block) {
     case 'code':
       return `<pre><code>${inlineToHtml(block.children)}</code></pre>`
     case 'image':
-      return `<img src="${'http://localhost:1337' + block.image?.url}" alt="${block.image?.alternativeText || ''}" class="article-block-img" />`
+      return `<img src="${API_URL + (block.image?.url ?? '')}" alt="${block.image?.alternativeText || ''}" class="article-block-img" />`
     default:
       return ''
   }
@@ -74,7 +75,7 @@ const heroSubtitle = computed(() => {
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://localhost:1337/api/articles?populate=main_image')
+    const res = await fetch(`${API_URL}/api/articles?populate=main_image`)
     if (!res.ok) throw new Error(`Erreur ${res.status}`)
     const json = await res.json()
     const list = Array.isArray(json.data) ? json.data : []
@@ -107,7 +108,7 @@ onMounted(async () => {
         <Panel :title="article.title">
           <img
             v-if="article.main_image?.url"
-            :src="'http://localhost:1337' + article.main_image.url"
+            :src="API_URL + article.main_image.url"
             :alt="article.title"
             class="article-main-img"
           />

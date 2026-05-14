@@ -267,6 +267,23 @@
   margin-bottom: 0.3rem;
 }
 
+/* Loading / error / empty states */
+.news-loading,
+.news-empty {
+  padding: 2rem 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.news-error {
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  background: #fff3f3;
+  border: 1px solid #f5c2c2;
+  color: #c0392b;
+  font-size: 0.9rem;
+}
+
 /* Contact form */
 .contact-grid {
   display: grid;
@@ -298,6 +315,26 @@
   min-height: 130px;
 }
 
+.form-success {
+  padding: 1rem 1.2rem;
+  border-radius: 8px;
+  background: #f0faf2;
+  border: 1px solid #a8dab5;
+  color: #1d7a3a;
+  font-size: 0.9rem;
+  margin-bottom: 0.85rem;
+}
+
+.form-error {
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  background: #fff3f3;
+  border: 1px solid #f5c2c2;
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -316,6 +353,12 @@
 
 .btn:hover {
   filter: brightness(1.05);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: none;
 }
 
 /* Article and Evenement detail pages */

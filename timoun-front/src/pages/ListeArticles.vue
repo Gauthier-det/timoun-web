@@ -4,6 +4,7 @@ import SiteHeader from '../components/SiteHeader.vue'
 import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Section from '../components/Section.vue'
+import { API_URL } from '../api.js'
 
 const articles = ref([])
 const loading = ref(true)
@@ -22,7 +23,7 @@ const sortedArticles = computed(() =>
 
 onMounted(async () => {
   try {
-    const res = await fetch('http://localhost:1337/api/articles?populate=main_image')
+    const res = await fetch(`${API_URL}/api/articles?populate=main_image`)
     if (!res.ok) throw new Error(`Erreur ${res.status}`)
     const json = await res.json()
     // Strapi singleType returns data as object; normalize to array
@@ -60,7 +61,7 @@ onMounted(async () => {
             <div class="news-thumb">
               <img
                 v-if="article.main_image?.url"
-                :src="'http://localhost:1337' + article.main_image.url"
+                :src="API_URL + article.main_image.url"
                 :alt="article.title"
                 class="news-thumb-img"
               />

@@ -5,6 +5,7 @@ import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Section from '../components/Section.vue'
 import Panel from '../components/Panel.vue'
+import { API_URL } from '../api.js'
 
 const form = ref({
   nom: '',
@@ -13,9 +14,38 @@ const form = ref({
   message: ''
 })
 
-const handleSubmit = () => {
-  console.log('Formulaire soumis:', form.value)
-  // À intégrer avec l'API backend
+const loading = ref(false)
+const success = ref(false)
+const error = ref(null)
+
+const handleSubmit = async () => {
+  if (!form.value.nom || !form.value.email || !form.value.message) {
+    error.value = 'Veuillez remplir les champs obligatoires (nom, e-mail, message).'
+    return
+  }
+
+  loading.value = true
+  error.value = null
+
+  try {
+    const res = await fetch(`${API_URL}/api/contact-messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: { ...form.value } }),
+    })
+
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({}))
+      throw new Error(json?.error?.message || `Erreur ${res.status}`)
+    }
+
+    success.value = true
+    form.value = { nom: '', email: '', sujet: '', message: '' }
+  } catch (e) {
+    error.value = e.message || 'Une erreur est survenue. Veuillez réessayer.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -23,7 +53,7 @@ const handleSubmit = () => {
   <div class="page-wrapper">
     <SiteHeader />
     <main>
-      <Hero 
+      <Hero
         kicker="Nous contacter"
         title="Vous avez une question, un message ou une idée à partager ? Vous voulez nous rejoindre ?"
         subtitle="N'hésitez pas à nous écrire pour en savoir plus sur l'association ou nous aider."
@@ -32,24 +62,30 @@ const handleSubmit = () => {
       <Section title="">
         <div class="contact-grid">
           <Panel title="Envoyer un message">
-            <form @submit.prevent="handleSubmit">
+            <div v-if="success" class="form-success">
+              Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.
+            </div>
+            <form v-else @submit.prevent="handleSubmit">
+              <div v-if="error" class="form-error">{{ error }}</div>
               <div class="form-field">
-                <label class="form-label" for="nom">Nom</label>
-                <input class="form-input" id="nom" v-model="form.nom" type="text" placeholder="Votre nom">
+                <label class="form-label" for="nom">Nom <span aria-hidden="true">*</span></label>
+                <input class="form-input" id="nom" v-model="form.nom" type="text" placeholder="Votre nom" required>
               </div>
               <div class="form-field">
-                <label class="form-label" for="email">Adresse e‑mail</label>
-                <input class="form-input" id="email" v-model="form.email" type="email" placeholder="vous@example.org">
+                <label class="form-label" for="email">Adresse e‑mail <span aria-hidden="true">*</span></label>
+                <input class="form-input" id="email" v-model="form.email" type="email" placeholder="vous@example.org" required>
               </div>
               <div class="form-field">
                 <label class="form-label" for="sujet">Sujet</label>
                 <input class="form-input" id="sujet" v-model="form.sujet" type="text" placeholder="Objet de votre message">
               </div>
               <div class="form-field">
-                <label class="form-label" for="message">Message</label>
-                <textarea class="form-textarea" id="message" v-model="form.message" placeholder="Votre message..."></textarea>
+                <label class="form-label" for="message">Message <span aria-hidden="true">*</span></label>
+                <textarea class="form-textarea" id="message" v-model="form.message" placeholder="Votre message..." required></textarea>
               </div>
-              <button type="submit" class="btn">Envoyer</button>
+              <button type="submit" class="btn" :disabled="loading">
+                {{ loading ? 'Envoi en cours…' : 'Envoyer' }}
+              </button>
             </form>
           </Panel>
 
