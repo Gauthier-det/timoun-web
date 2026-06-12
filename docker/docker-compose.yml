@@ -2,16 +2,16 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: timoun_postgres
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-strapi}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-strapi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}
       POSTGRES_DB: ${POSTGRES_DB:-timoun_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    # Pas de mapping de port : Postgres n'est accessible que via le reseau Docker interne
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-strapi}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-strapi} -d ${POSTGRES_DB:-timoun_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -21,6 +21,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.back
     container_name: timoun_back
+    restart: unless-stopped
     env_file: .env
     environment:
       HOST: 0.0.0.0
@@ -30,8 +31,9 @@ services:
       DATABASE_PORT: 5432
       DATABASE_NAME: ${POSTGRES_DB:-timoun_db}
       DATABASE_USERNAME: ${POSTGRES_USER:-strapi}
-      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-strapi}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}
       NODE_ENV: production
+    # En prod derriere un reverse-proxy, retirer ce mapping et router via Nginx
     ports:
       - "1337:1337"
     depends_on:
@@ -47,6 +49,7 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:1337}
     container_name: timoun_front
+    restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
