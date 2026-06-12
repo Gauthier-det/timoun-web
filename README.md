@@ -102,66 +102,113 @@ L'application démarre sur **http://localhost:5173** (port Vite par défaut).
 
 ---
 
-## Déploiement avec Docker
+## Déploiement Docker (stack locale, sans TLS)
 
-Toute la stack (PostgreSQL, Strapi, Nginx + frontend) est gérée par le `docker-compose.yml` dans le dossier `docker/`.
-
-### 1. Configurer les variables d'environnement
+Pour tester la stack complète en local (front + Strapi + Postgres) sans certificats TLS :
 
 ```bash
 cp docker/.env.example docker/.env
-```
-
-Remplir **toutes** les valeurs dans `docker/.env` :
-
-```env
-# Base de données
-POSTGRES_USER=strapi
-POSTGRES_PASSWORD=<mot_de_passe_fort>
-POSTGRES_DB=timoun_db
-
-# Sécurité Strapi (générer des valeurs aléatoires)
-APP_KEYS=cle1base64,cle2base64,cle3base64,cle4base64
-API_TOKEN_SALT=
-ADMIN_JWT_SECRET=
-TRANSFER_TOKEN_SALT=
-JWT_SECRET=
-ENCRYPTION_KEY=
-
-# URL publique de l'API (utilisée par le build du frontend)
-VITE_API_URL=https://votre-domaine.com/api
-```
-
-### 2. Construire et démarrer
-
-```bash
+# Remplir les secrets dans docker/.env (cf section ci-dessous)
 cd docker
 docker compose up -d --build
 ```
 
 | Service    | Port exposé | Description                  |
 |------------|-------------|------------------------------|
-| PostgreSQL | interne     | Base de données               |
-| Strapi     | 1337        | API + panneau d'administration|
-| Nginx      | 80          | Frontend Vue (SPA)            |
+| Caddy      | -           | Pas utilisé en local         |
+| PostgreSQL | interne     | Base de données              |
+| Strapi     | 1337        | API + panneau d'admin        |
+| Nginx      | 80          | Frontend Vue (SPA)           |
 
-### 3. Premier démarrage
+Variables `docker/.env` minimales pour le local :
 
-Strapi applique les migrations et insère les données de seed automatiquement au démarrage.
+```env
+POSTGRES_USER=strapi
+POSTGRES_PASSWORD=<mot_de_passe>
+POSTGRES_DB=timoun_db
+APP_KEYS=cle1,cle2,cle3,cle4
+API_TOKEN_SALT=...
+ADMIN_JWT_SECRET=...
+TRANSFER_TOKEN_SALT=...
+JWT_SECRET=...
+ENCRYPTION_KEY=...
+VITE_API_URL=http://localhost:1337
+CORS_ORIGINS=http://localhost
+```
 
-Pour créer le premier compte administrateur Strapi, se connecter sur **http://votre-serveur:1337/admin**.
+Pour générer les secrets : `openssl rand -base64 32`.
 
-### 4. Arrêter la stack
+Premier admin Strapi : `http://localhost:1337/admin`.
+
+---
+
+## Déploiement en production (avec TLS et reverse-proxy)
+
+La prod utilise un overlay `docker-compose.prod.yml` qui ajoute **Caddy** en frontal :
+
+- TLS automatique via Let's Encrypt
+- Reverse-proxy : `/api`, `/admin`, `/uploads`, `/_health`… → Strapi ; le reste → SPA Vue
+- Front et Strapi ne sont **plus exposés sur l'hôte** : seuls les ports 80 et 443 (Caddy) sont ouverts vers l'extérieur
+
+### Prérequis serveur
+
+- VPS avec Docker + Docker Compose (≥ 2 GB RAM, 4-6 GB recommandés pour le build admin Strapi)
+- Un nom de domaine pointant (A/AAAA) vers l'IP du VPS
+- Firewall fermé sauf `22`, `80`, `443` (ex. `ufw allow 22,80,443/tcp`)
+
+### Étapes
+
+```bash
+git clone <repo>
+cd timoun-web
+
+# Configurer les secrets et le domaine
+cp docker/.env.example docker/.env
+# Editer docker/.env :
+#   - regenerer TOUS les secrets (openssl rand -base64 32)
+#   - POSTGRES_PASSWORD = mot de passe fort
+#   - CORS_ORIGINS=https://votre-domaine.fr
+#   - VITE_API_URL=   (vide -> URLs relatives, meme domaine)
+#   - DOMAIN=votre-domaine.fr
+#   - ACME_EMAIL=admin@votre-domaine.fr
+
+cd docker
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```
+
+Caddy obtient automatiquement un certificat Let's Encrypt au premier démarrage (peut prendre 30s-1min). Les renouvellements sont automatiques.
+
+### Premier admin Strapi en prod
+
+Aller sur `https://votre-domaine.fr/admin` et créer le compte administrateur.
+
+### Mise à jour du site en prod
+
+```bash
+git pull
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```
+
+### Activer HSTS
+
+Une fois certain que le TLS marche depuis ~1 semaine, décommenter la ligne `header Strict-Transport-Security ...` dans `docker/Caddyfile` et relancer Caddy. **Ne pas activer HSTS avant** : si le cert pose problème, les navigateurs refuseront toute connexion HTTP pendant 1 an.
+
+### Sauvegardes
+
+Cron quotidien recommandé sur l'hôte :
+
+```bash
+0 3 * * * docker exec timoun_postgres pg_dump -U strapi timoun_db | gzip > /backup/timoun-$(date +\%F).sql.gz
+```
+
+Puis synchroniser `/backup/` vers du stockage distant (S3, Backblaze B2, rsync sur un autre serveur).
+
+### Arrêt / nettoyage
 
 ```bash
 cd docker
-docker compose down
-```
-
-Pour supprimer les volumes (données) :
-
-```bash
-docker compose down -v
+docker compose -f docker-compose.yml -f docker-compose.prod.yml down       # arrete
+docker compose -f docker-compose.yml -f docker-compose.prod.yml down -v    # arrete + SUPPRIME les donnees (DB, uploads)
 ```
 
 ---

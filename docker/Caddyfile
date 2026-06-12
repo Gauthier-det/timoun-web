@@ -1,0 +1,23 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$DOMAIN} {
+	encode gzip zstd
+
+	# Endpoints servis par Strapi (API publique, admin, uploads, healthcheck)
+	@strapi {
+		path /api/* /admin /admin/* /uploads/* /upload/* /content-manager/* /content-type-builder/* /content-releases/* /users-permissions/* /i18n/* /email/* /review-workflows/* /_health
+	}
+	handle @strapi {
+		reverse_proxy back:1337
+	}
+
+	# Tout le reste -> SPA Vue servie par Nginx
+	handle {
+		reverse_proxy front:80
+	}
+
+	# Activer HSTS apres avoir verifie que TLS marche depuis ~1 semaine
+	# header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+}

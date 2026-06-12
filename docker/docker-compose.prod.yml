@@ -1,0 +1,38 @@
+# Overlay de production a appliquer par dessus docker-compose.yml :
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Effets :
+# - Ajoute le service Caddy (TLS auto via Let's Encrypt + reverse-proxy)
+# - Retire l'exposition des ports front (80) et back (1337) sur l'hote
+#   -> seuls les ports 80 / 443 (Caddy) sont ouverts vers l'exterieur
+# - Strapi et Nginx restent accessibles uniquement via le reseau Docker interne
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: timoun_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: "${DOMAIN:?DOMAIN est obligatoire (ex: timoun.example.fr)}"
+      ACME_EMAIL: "${ACME_EMAIL:?ACME_EMAIL est obligatoire pour Let's Encrypt}"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - front
+      - back
+
+  back:
+    ports: !reset []
+
+  front:
+    ports: !reset []
+
+volumes:
+  caddy_data:
+  caddy_config:
