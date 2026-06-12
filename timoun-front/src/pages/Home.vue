@@ -5,26 +5,16 @@ import SiteFooter from '../components/SiteFooter.vue'
 import Section from '../components/Section.vue'
 import Card from '../components/Card.vue'
 import { API_URL } from '../api.js'
+import { formatDate, firstParagraph } from '../utils/format.js'
 
 const articles = ref([])
 const evenements = ref([])
 const loading = ref(true)
 const error = ref(null)
 
-function formatDate(dateStr) {
-  if (!dateStr) return '-'
-  return new Date(dateStr).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
-
 function normalize(data) {
   if (!data) return []
   return Array.isArray(data) ? data : [data]
-}
-
-function firstParagraph(blocks) {
-  if (!Array.isArray(blocks)) return ''
-  const p = blocks.find(b => b.type === 'paragraph')
-  return p?.children?.map(c => c.text || '').join('') || ''
 }
 
 const latestArticles = computed(() =>

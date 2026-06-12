@@ -73,7 +73,7 @@ import Section from '../components/Section.vue'
         </div>
       </Section>
 
-      <Section title="L'equipe en France">
+      <Section title="L'équipe en France">
         <div>
           <div class="subsection-text">
             <p>

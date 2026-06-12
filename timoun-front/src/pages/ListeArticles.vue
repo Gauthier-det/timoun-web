@@ -5,15 +5,11 @@ import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Section from '../components/Section.vue'
 import { API_URL } from '../api.js'
+import { formatDate } from '../utils/format.js'
 
 const articles = ref([])
 const loading = ref(true)
 const error = ref(null)
-
-function formatDate(dateStr) {
-  const d = new Date(dateStr)
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
 
 const sortedArticles = computed(() =>
   [...articles.value].sort(

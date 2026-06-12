@@ -291,6 +291,19 @@
   gap: 1.7rem;
 }
 
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-entry {
+  margin-bottom: 1rem;
+}
+
 .form-field {
   margin-bottom: 0.85rem;
 }

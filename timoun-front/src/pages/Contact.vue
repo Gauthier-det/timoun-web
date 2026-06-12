@@ -11,7 +11,8 @@ const form = ref({
   nom: '',
   email: '',
   sujet: '',
-  message: ''
+  message: '',
+  website: ''
 })
 
 const loading = ref(false)
@@ -40,7 +41,7 @@ const handleSubmit = async () => {
     }
 
     success.value = true
-    form.value = { nom: '', email: '', sujet: '', message: '' }
+    form.value = { nom: '', email: '', sujet: '', message: '', website: '' }
   } catch (e) {
     error.value = e.message || 'Une erreur est survenue. Veuillez réessayer.'
   } finally {
@@ -65,8 +66,12 @@ const handleSubmit = async () => {
             <div v-if="success" class="form-success">
               Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.
             </div>
-            <form v-else @submit.prevent="handleSubmit">
+            <form v-else @submit.prevent="handleSubmit" novalidate>
               <div v-if="error" class="form-error">{{ error }}</div>
+              <div class="honeypot" aria-hidden="true">
+                <label for="website">Ne pas remplir</label>
+                <input id="website" type="text" name="website" tabindex="-1" autocomplete="off" v-model="form.website">
+              </div>
               <div class="form-field">
                 <label class="form-label" for="nom">Nom <span aria-hidden="true">*</span></label>
                 <input class="form-input" id="nom" v-model="form.nom" type="text" placeholder="Votre nom" required>
@@ -90,27 +95,27 @@ const handleSubmit = async () => {
           </Panel>
 
           <Panel title="Coordonnées de l'association">
-            <div style="margin-bottom: 1rem;">
+            <div class="contact-entry">
               <strong>Présidente :</strong> Mylène Liard<br>
               <a href="mailto:mylene.liard1@gmail.com">mylene.liard1@gmail.com</a> – 06 85 66 39 30
             </div>
-            <div style="margin-bottom: 1rem;">
+            <div class="contact-entry">
               <strong>Normandie 27 & 76 :</strong> Jacques et Danièle Caldwell<br>
               <a href="mailto:jacques.caldwell@free.fr">jacques.caldwell@free.fr</a> – 06 12 22 46 73
             </div>
-            <div style="margin-bottom: 1rem;">
+            <div class="contact-entry">
               <strong>Normandie 14, 50 & 61 :</strong> Annie Lambert-Carabin<br>
               <a href="mailto:annie.lambert-carabin@wanadoo.fr">annie.lambert-carabin@wanadoo.fr</a> – 06 83 54 40 51
             </div>
-            <div style="margin-bottom: 1rem;">
+            <div class="contact-entry">
               <strong>Bretagne :</strong> Marie José Mazé<br>
               <a href="mailto:mjmaze@laposte.net">mjmaze@laposte.net</a> - 07 78 07 65 11
             </div>
-            <div style="margin-bottom: 1rem;">
+            <div class="contact-entry">
               <strong>Parrainages et aide à la scolarité :</strong> Colette Gagneux<br>
               <a href="mailto:colette.gagneux@free.fr">colette.gagneux@free.fr</a> – 06 81 59 82 77
             </div>
-            <div style="margin-bottom: 1rem;">
+            <div class="contact-entry">
               <strong>Parrainages « développement rural » :</strong> Jacky Berquez<br>
               <a href="mailto:berquez@free.fr">berquez@free.fr</a> - 06 72 76 01 13
             </div>

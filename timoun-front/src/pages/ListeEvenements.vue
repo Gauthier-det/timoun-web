@@ -5,35 +5,11 @@ import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Section from '../components/Section.vue'
 import { API_URL } from '../api.js'
+import { formatDateRange, firstParagraph } from '../utils/format.js'
 
 const evenements = ref([])
 const loading = ref(true)
 const error = ref(null)
-
-function formatDate(dateStr) {
-  if (!dateStr) return '-'
-  const d = new Date(dateStr)
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
-
-function formatDateRange(startDateStr, endDateStr) {
-  const start = formatDate(startDateStr)
-  if (!endDateStr) return start
-  const end = formatDate(endDateStr)
-  return `${start} - ${end}`
-}
-
-function firstParagraph(blocks) {
-  if (!Array.isArray(blocks)) return ''
-  const paragraph = blocks.find((block) => block.type === 'paragraph')
-  if (!paragraph || !Array.isArray(paragraph.children)) return ''
-
-  return paragraph.children
-    .filter((node) => typeof node.text === 'string')
-    .map((node) => node.text)
-    .join(' ')
-    .trim()
-}
 
 const sortedEvenements = computed(() =>
   [...evenements.value].sort((a, b) => new Date(a.start_date) - new Date(b.start_date))

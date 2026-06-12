@@ -28,9 +28,9 @@ const buildImages = (paths) => paths.map((path) => ({
 const categories = [
   {
     id: 'school',
-    kicker: 'Education',
-    title: "L'ecole",
-    description: "Classes, repas, fournitures et vie scolaire au coeur de l'action.",
+    kicker: 'Éducation',
+    title: "L'école",
+    description: "Classes, repas, fournitures et vie scolaire au cœur de l'action.",
     images: buildImages([
       '/resources/school/schoolclasses-de-pre-scolaire-maternelle-1.jpg',
       '/resources/school/schoolclasses-de-pre-scolaire-maternelle-6.jpg',
@@ -62,7 +62,7 @@ const categories = [
     id: 'village',
     kicker: 'Terrain',
     title: 'Le village',
-    description: 'Le quotidien a Ternier et dans les environs de la Vallee de Jacmel.',
+    description: 'Le quotidien à Ternier et dans les environs de la Vallée de Jacmel.',
     images: buildImages([
       '/resources/village/villageternier-et-alentours-1.jpg'
     ])
@@ -83,9 +83,9 @@ const categories = [
   },
   {
     id: 'rural',
-    kicker: 'Developpement rural',
+    kicker: 'Développement rural',
     title: 'Autonomie',
-    description: 'Jardins, semences et activites agricoles menees avec les familles.',
+    description: 'Jardins, semences et activités agricoles menées avec les familles.',
     images: buildImages([
       '/resources/rural/ruralrural-1.jpg',
       '/resources/rural/ruralrural-2.jpg',
@@ -98,7 +98,7 @@ const categories = [
     id: 'graphics',
     kicker: 'Association',
     title: 'Moments de vie',
-    description: "Identite visuelle, moments solidaires et photos d'engagement.",
+    description: "Identité visuelle, moments solidaires et photos d'engagement.",
     images: buildImages([
       '/resources/graphics/graphicscourse-solidaire.jpg',
       '/resources/graphics/graphicsdrapeau.jpg',
@@ -132,10 +132,10 @@ const goToImage = (categoryId, index) => {
   <div class="page-wrapper">
     <SiteHeader />
     <main>
-      <Hero 
+      <Hero
         kicker="Photos"
         title="Galerie photos"
-        subtitle="Explorez toutes les categories en carrousel : ecole, village, paysages, rural et vie associative."
+        subtitle="Explorez toutes les catégories en carrousel : école, village, paysages, rural et vie associative."
       />
 
       <Section
@@ -156,7 +156,7 @@ const goToImage = (categoryId, index) => {
             <button
               class="gallery-nav gallery-nav-prev"
               type="button"
-              :aria-label="`Image precedente ${category.title}`"
+              :aria-label="`Image précédente ${category.title}`"
               @click="previousImage(category.id, category.images.length)"
             >
               ‹
@@ -190,7 +190,7 @@ const goToImage = (categoryId, index) => {
                 class="gallery-dot"
                 :class="{ active: carouselIndexes[category.id] === imageIndex }"
                 type="button"
-                :aria-label="`Aller a l'image ${imageIndex + 1}`"
+                :aria-label="`Aller à l'image ${imageIndex + 1}`"
                 @click="goToImage(category.id, imageIndex)"
               />
             </div>

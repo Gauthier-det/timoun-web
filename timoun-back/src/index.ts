@@ -6,6 +6,7 @@ const PUBLIC_ACTIONS = [
   'api::article.article.findOne',
   'api::evenement.evenement.find',
   'api::evenement.evenement.findOne',
+  'api::contact-message.contact-message.create',
 ];
 
 async function ensurePublicPermissions(strapi: Core.Strapi) {
@@ -44,7 +45,7 @@ async function seedData(strapi: Core.Strapi) {
 
     if (articleCount === 0) {
       for (const data of seedArticles) {
-        await strapi.documents('api::article.article').create({ data, status: 'published' });
+        await strapi.documents('api::article.article').create({ data: data as any, status: 'published' });
       }
       strapi.log.info(`[seed] ${seedArticles.length} articles créés.`);
     } else {
@@ -61,7 +62,7 @@ async function seedData(strapi: Core.Strapi) {
 
     if (evenementCount === 0) {
       for (const data of seedEvenements) {
-        await strapi.documents('api::evenement.evenement').create({ data, status: 'published' });
+        await strapi.documents('api::evenement.evenement').create({ data: data as any, status: 'published' });
       }
       strapi.log.info(`[seed] ${seedEvenements.length} évènements créés.`);
     } else {

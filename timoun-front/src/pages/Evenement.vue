@@ -6,72 +6,14 @@ import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Panel from '../components/Panel.vue'
 import { API_URL } from '../api.js'
+import { blocksToHtml } from '../utils/blocks.js'
+import { formatDateRange } from '../utils/format.js'
 
 const route = useRoute()
 const evenementId = route.params.id
 const evenement = ref(null)
 const loading = ref(true)
 const error = ref(null)
-
-function formatDate(dateStr) {
-  if (!dateStr) return '-'
-  const d = new Date(dateStr)
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
-
-function formatDateRange(startDateStr, endDateStr) {
-  const start = formatDate(startDateStr)
-  if (!endDateStr) return start
-  const end = formatDate(endDateStr)
-  return `${start} - ${end}`
-}
-
-function blocksToHtml(blocks) {
-  if (!Array.isArray(blocks)) return ''
-  return blocks.map((block) => blockToHtml(block)).join('')
-}
-
-function blockToHtml(block) {
-  switch (block.type) {
-    case 'paragraph':
-      return `<p>${inlineToHtml(block.children)}</p>`
-    case 'heading':
-      return `<h${block.level}>${inlineToHtml(block.children)}</h${block.level}>`
-    case 'list': {
-      const tag = block.format === 'ordered' ? 'ol' : 'ul'
-      const items = (block.children || []).map((item) => `<li>${inlineToHtml(item.children)}</li>`).join('')
-      return `<${tag}>${items}</${tag}>`
-    }
-    case 'quote':
-      return `<blockquote>${inlineToHtml(block.children)}</blockquote>`
-    case 'code':
-      return `<pre><code>${inlineToHtml(block.children)}</code></pre>`
-    case 'image':
-      return `<img src="${API_URL + (block.image?.url ?? '')}" alt="${block.image?.alternativeText || ''}" class="article-block-img" />`
-    default:
-      return ''
-  }
-}
-
-function inlineToHtml(children) {
-  if (!Array.isArray(children)) return ''
-  return children
-    .map((node) => {
-      if (node.type === 'link') return `<a href="${node.url}">${inlineToHtml(node.children)}</a>`
-      let text = escapeHtml(node.text || '')
-      if (node.bold) text = `<strong>${text}</strong>`
-      if (node.italic) text = `<em>${text}</em>`
-      if (node.underline) text = `<u>${text}</u>`
-      if (node.strikethrough) text = `<s>${text}</s>`
-      if (node.code) text = `<code>${text}</code>`
-      return text
-    })
-    .join('')
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
 
 const contentHtml = computed(() => blocksToHtml(evenement.value?.content))
 
@@ -84,21 +26,12 @@ const heroSubtitle = computed(() => {
 
 onMounted(async () => {
   try {
-    const res = await fetch(`${API_URL}/api/evenements?populate=image`)
+    const res = await fetch(`${API_URL}/api/evenements/${encodeURIComponent(evenementId)}?populate=image`)
+    if (res.status === 404) throw new Error('Évènement introuvable')
     if (!res.ok) throw new Error(`Erreur ${res.status}`)
-
     const json = await res.json()
-    const list = Array.isArray(json.data) ? json.data : []
-
-    evenement.value = list.find((item) => `${item.documentId}` === `${evenementId}` || `${item.id}` === `${evenementId}`) || null
-
-    if (!evenement.value && list.length === 1) {
-      evenement.value = list[0]
-    }
-
-    if (!evenement.value) {
-      throw new Error('Évènement introuvable')
-    }
+    evenement.value = json.data || null
+    if (!evenement.value) throw new Error('Évènement introuvable')
   } catch (e) {
     error.value = e.message
   } finally {

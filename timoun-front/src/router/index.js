@@ -11,6 +11,7 @@ import Article from '../pages/Article.vue'
 import ListeEvenements from '../pages/ListeEvenements.vue'
 import Evenement from '../pages/Evenement.vue'
 import Contact from '../pages/Contact.vue'
+import NotFound from '../pages/NotFound.vue'
 
 const routes = [
   {
@@ -62,6 +63,11 @@ const routes = [
     path: '/contact',
     name: 'contact',
     component: Contact
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: NotFound
   }
 ]
 

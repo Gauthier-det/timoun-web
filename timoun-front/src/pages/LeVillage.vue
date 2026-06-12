@@ -15,7 +15,7 @@ import Section from '../components/Section.vue'
         subtitle="Situé en Haïti, ce village de montagne est l'endroit que nous soutenons avec nos partenaires locaux."
       />
 
-      <Section title="Presentation du village">
+      <Section title="Présentation du village">
         <div>
           <div class="subsection-text">
             <p>
@@ -53,7 +53,7 @@ import Section from '../components/Section.vue'
               Le nombre d'enfants par famille a globalement baissé au village, et la vie s'améliore progressivement.
             </p>
           </div>
-          <img class="subsection-image" src="/resources/school/schoolsur-le-chemin-de-lecole.jpg" alt="Chemin de l'ecole">
+          <img class="subsection-image" src="/resources/school/schoolsur-le-chemin-de-lecole.jpg" alt="Chemin de l'école">
         </div>
       </Section>
     </main>

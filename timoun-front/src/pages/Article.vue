@@ -6,6 +6,8 @@ import SiteFooter from '../components/SiteFooter.vue'
 import Hero from '../components/Hero.vue'
 import Panel from '../components/Panel.vue'
 import { API_URL } from '../api.js'
+import { blocksToHtml } from '../utils/blocks.js'
+import { formatDate } from '../utils/format.js'
 
 const route = useRoute()
 const articleId = route.params.id
@@ -13,58 +15,6 @@ const articleId = route.params.id
 const article = ref(null)
 const loading = ref(true)
 const error = ref(null)
-
-function formatDate(dateStr) {
-  if (!dateStr) return '-'
-  const d = new Date(dateStr)
-  if (Number.isNaN(d.getTime())) return '-'
-  return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
-
-// Converts Strapi Blocks JSON to HTML string
-function blocksToHtml(blocks) {
-  if (!Array.isArray(blocks)) return ''
-  return blocks.map(block => blockToHtml(block)).join('')
-}
-
-function blockToHtml(block) {
-  switch (block.type) {
-    case 'paragraph':
-      return `<p>${inlineToHtml(block.children)}</p>`
-    case 'heading':
-      return `<h${block.level}>${inlineToHtml(block.children)}</h${block.level}>`
-    case 'list':
-      const tag = block.format === 'ordered' ? 'ol' : 'ul'
-      const items = (block.children || []).map(item => `<li>${inlineToHtml(item.children)}</li>`).join('')
-      return `<${tag}>${items}</${tag}>`
-    case 'quote':
-      return `<blockquote>${inlineToHtml(block.children)}</blockquote>`
-    case 'code':
-      return `<pre><code>${inlineToHtml(block.children)}</code></pre>`
-    case 'image':
-      return `<img src="${API_URL + (block.image?.url ?? '')}" alt="${block.image?.alternativeText || ''}" class="article-block-img" />`
-    default:
-      return ''
-  }
-}
-
-function inlineToHtml(children) {
-  if (!Array.isArray(children)) return ''
-  return children.map(node => {
-    if (node.type === 'link') return `<a href="${node.url}">${inlineToHtml(node.children)}</a>`
-    let text = escapeHtml(node.text || '')
-    if (node.bold)          text = `<strong>${text}</strong>`
-    if (node.italic)        text = `<em>${text}</em>`
-    if (node.underline)     text = `<u>${text}</u>`
-    if (node.strikethrough) text = `<s>${text}</s>`
-    if (node.code)          text = `<code>${text}</code>`
-    return text
-  }).join('')
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-}
 
 const contentHtml = computed(() => blocksToHtml(article.value?.content))
 
@@ -75,16 +25,12 @@ const heroSubtitle = computed(() => {
 
 onMounted(async () => {
   try {
-    const res = await fetch(`${API_URL}/api/articles?populate=main_image`)
+    const res = await fetch(`${API_URL}/api/articles/${encodeURIComponent(articleId)}?populate=main_image`)
+    if (res.status === 404) throw new Error('Article introuvable')
     if (!res.ok) throw new Error(`Erreur ${res.status}`)
     const json = await res.json()
-    const list = Array.isArray(json.data) ? json.data : []
-
-    article.value = list.find((item) => `${item.documentId}` === `${articleId}` || `${item.id}` === `${articleId}`) || null
-
-    if (!article.value) {
-      throw new Error('Article introuvable')
-    }
+    article.value = json.data || null
+    if (!article.value) throw new Error('Article introuvable')
   } catch (e) {
     error.value = e.message
   } finally {

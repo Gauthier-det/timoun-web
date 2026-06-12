@@ -86,8 +86,14 @@
   font-size: 0.95rem;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-decouvrir,
+.nav-actus {
   color: #fff;
+  background: transparent;
+  border: none;
+  font: inherit;
+  cursor: pointer;
   text-decoration: none;
   padding: 0.45rem 0.75rem;
   border-radius: 999px;
@@ -95,9 +101,18 @@
   white-space: nowrap;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-decouvrir:hover,
+.nav-actus:hover {
   background: rgba(255, 255, 255, 0.18);
   transform: translateY(-1px);
+}
+
+.nav-item-with-menu.active > .nav-decouvrir,
+.nav-item-with-menu.active > .nav-actus {
+  background: #fff;
+  color: var(--blue);
+  font-weight: 600;
 }
 
 .nav-links a.router-link-active {

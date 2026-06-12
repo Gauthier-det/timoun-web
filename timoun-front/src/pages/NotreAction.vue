@@ -15,15 +15,15 @@ import Section from '../components/Section.vue'
         subtitle="Une approche locale, transparente et durable au service des enfants et de leurs familles."
       />
 
-      <Section title="Developpement rural">
+      <Section title="Développement rural">
         <div>
           <div class="subsection-text">
             <p>
-              Nous travaillons en liaison avec Jeff, un jeune technicien agronome qui a fait toutes ses études en being parrainé grâce à l'association. 
+              Nous travaillons en liaison avec Jeff, un jeune technicien agronome qui a fait toutes ses études en étant parrainé grâce à l'association.
               Il est notre interlocuteur privilégié depuis 5 ans pour cette action.
             </p>
             <p>
-              We work with two main groups of women: Fanm an aksyon (F.A.L.) avec environ 90 personnes à Ridoré, 
+              Nous travaillons avec deux groupes principaux de femmes : Fanm an aksyon (F.A.L.) avec environ 90 personnes à Ridoré,
               et Organisation Fanm egzanple de Ternier (O.F.E.T.) avec environ 100 personnes.
             </p>
             <p>
@@ -36,7 +36,7 @@ import Section from '../components/Section.vue'
         </div>
       </Section>
 
-      <Section title="Parrainage et education">
+      <Section title="Parrainage et éducation">
         <div>
           <div class="subsection-text">
             <p>
@@ -48,18 +48,18 @@ import Section from '../components/Section.vue'
             </p>
             <p>
               • <strong>Le Collège Imènes Ogé</strong> : classes pré-scolaires et primaires (455 élèves en 2025-2026)<br>
-              • <strong>Le Collège secondaire de Ternier</strong> : de la 7ème année à la terminale (345 élèves en 2025-2026)<br>
+              • <strong>Le Collège secondaire de Ternier</strong> : de la 7ᵉ année à la terminale (345 élèves en 2025-2026)<br>
               Ce collège affiche un taux de réussite exceptionnel de 90% au baccalauréat, contre environ 40% dans le pays.
             </p>
             <p>
               Tous les élèves, parrainés ou non, ainsi que les personnels, reçoivent chaque jour scolaire un repas financé par Ti'moun.
             </p>
           </div>
-          <img class="subsection-image" src="/resources/school/schoolclasses-du-college-secondaire-de-ternier-1.jpg" alt="Classe du college">
+          <img class="subsection-image" src="/resources/school/schoolclasses-du-college-secondaire-de-ternier-1.jpg" alt="Classe du collège">
         </div>
       </Section>
 
-      <Section title="Sante et urgences">
+      <Section title="Santé et urgences">
         <div>
           <div class="subsection-text">
             <p>
