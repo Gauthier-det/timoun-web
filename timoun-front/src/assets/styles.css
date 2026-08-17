@@ -212,8 +212,7 @@ main {
 .card-media-placeholder {
   margin-top: 0.7rem;
   border-radius: 8px;
-  border: 2px dashed rgba(0, 0, 0, 0.2);
-  height: 140px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
