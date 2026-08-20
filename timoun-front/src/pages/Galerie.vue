@@ -169,7 +169,6 @@ const goToImage = (categoryId, index) => {
               >
                 <figure v-for="image in category.images" :key="image.src" class="gallery-slide">
                   <img class="gallery-slide-image" :src="image.src" :alt="image.alt" loading="lazy">
-                  <figcaption class="gallery-caption">{{ image.alt }}</figcaption>
                 </figure>
               </div>
             </div>

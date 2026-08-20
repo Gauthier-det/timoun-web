@@ -88,15 +88,6 @@
   display: block;
 }
 
-.gallery-caption {
-  margin: 0;
-  padding: 0.55rem 0.8rem;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  background: #fff;
-}
-
 .gallery-nav {
   position: absolute;
   top: calc(50% - 22px);
@@ -376,9 +367,9 @@
 
 /* Article and Evenement detail pages */
 .article-main-img {
-  width: min(100%, 860px);
+  width: min(100%, 480px);
   height: auto;
-  max-height: 500px;
+  max-height: 320px;
   object-fit: contain;
   border-radius: 10px;
   margin-bottom: 1.5rem;

@@ -76,7 +76,7 @@ onMounted(async () => {
                 :title="article.title || 'Sans titre'"
                 :date="formatDate(article.release_date)"
                 :text="article.resume || ''"
-                :imageUrl="article.main_image?.url ? API_URL + article.main_image.url : undefined"
+                :withMedia="false"
               />
             </RouterLink>
             <p v-if="latestArticles.length === 0" class="text-muted">Aucun article disponible.</p>
@@ -85,17 +85,22 @@ onMounted(async () => {
 
         <Section kicker="Agenda" title="Calendrier et futurs évènements">
           <div class="timeline">
-            <Card
+            <RouterLink
               v-for="evt in upcomingEvents"
               :key="evt.documentId"
-              type="Évènement à venir"
-              :title="evt.title || 'Sans titre'"
-              :date="formatDate(evt.start_date)"
-              :location="evt.city || ''"
-              :isEvent="true"
-              :text="firstParagraph(evt.content)"
-              :withMedia="false"
-            />
+              :to="`/evenements/${evt.documentId}`"
+              class="card-link"
+            >
+              <Card
+                type="Évènement à venir"
+                :title="evt.title || 'Sans titre'"
+                :date="formatDate(evt.start_date)"
+                :location="evt.city || ''"
+                :isEvent="true"
+                :text="firstParagraph(evt.content)"
+                :withMedia="false"
+              />
+            </RouterLink>
             <p v-if="upcomingEvents.length === 0" class="text-muted">Aucun évènement à venir.</p>
           </div>
         </Section>
