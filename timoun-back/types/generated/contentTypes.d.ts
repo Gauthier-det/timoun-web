@@ -557,6 +557,44 @@ export interface ApiEvenementEvenement extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiGalerieCategorieGalerieCategorie
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'galerie_categories';
+  info: {
+    displayName: 'Cat\u00E9gorie galerie';
+    pluralName: 'galerie-categories';
+    singularName: 'galerie-categorie';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    images: Schema.Attribute.Media<'images', true>;
+    kicker: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::galerie-categorie.galerie-categorie'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1071,6 +1109,7 @@ declare module '@strapi/strapi' {
       'api::article.article': ApiArticleArticle;
       'api::contact-message.contact-message': ApiContactMessageContactMessage;
       'api::evenement.evenement': ApiEvenementEvenement;
+      'api::galerie-categorie.galerie-categorie': ApiGalerieCategorieGalerieCategorie;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

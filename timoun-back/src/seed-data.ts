@@ -1,3 +1,46 @@
+export const seedGalerieCategories = [
+  {
+    slug: 'school',
+    kicker: 'Éducation',
+    title: "L'école",
+    description: "Classes, repas, fournitures et vie scolaire au cœur de l'action.",
+    order: 1,
+    folder: 'school',
+  },
+  {
+    slug: 'village',
+    kicker: 'Terrain',
+    title: 'Le village',
+    description: 'Le quotidien à Ternier et dans les environs de la Vallée de Jacmel.',
+    order: 2,
+    folder: 'village',
+  },
+  {
+    slug: 'landscapes',
+    kicker: 'Nature',
+    title: 'Paysages',
+    description: 'Les reliefs, les routes et les paysages qui entourent le village.',
+    order: 3,
+    folder: 'landscapes',
+  },
+  {
+    slug: 'rural',
+    kicker: 'Développement rural',
+    title: 'Autonomie',
+    description: 'Jardins, semences et activités agricoles menées avec les familles.',
+    order: 4,
+    folder: 'rural',
+  },
+  {
+    slug: 'graphics',
+    kicker: 'Association',
+    title: 'Moments de vie',
+    description: "Identité visuelle, moments solidaires et photos d'engagement.",
+    order: 5,
+    folder: 'graphics',
+  },
+]
+
 export const seedArticles = [
   {
     title: 'Retour de mission en Haïti — décembre 2025',
